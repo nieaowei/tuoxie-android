@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">tuoxie-android</string>
+    <string name="login">登录</string>
+    <string name="password">密码</string>
+    <string name="register">注册</string>
+    <string name="usernamephone">用户名/手机号码</string>
+    <string name="loginimage">头像</string>
+</resources>
