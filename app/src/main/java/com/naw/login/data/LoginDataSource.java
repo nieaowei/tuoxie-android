@@ -1,6 +1,9 @@
 package com.naw.login.data;
 
+import android.content.Intent;
+
 import com.naw.login.data.model.LoggedInUser;
+import com.naw.login.ui.login.LoginActivity;
 
 import java.io.IOException;
 
