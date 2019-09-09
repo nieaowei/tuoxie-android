@@ -1,5 +1,7 @@
 package com.naw.login.data;
 
+import android.os.Handler;
+
 import com.naw.login.data.model.LoggedInUser;
 
 /**
@@ -43,9 +45,9 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result<LoggedInUser> login(String username, String password,final  Handler loginhandler) {
         // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
+        Result<LoggedInUser> result = dataSource.login(username, password,loginhandler);
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }
