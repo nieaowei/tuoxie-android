@@ -20,7 +20,8 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="密码"
-        android:textAlignment="center"/>
+        android:inputType="textPassword"
+        android:textAlignment="center" />
 
     <EditText
         android:id="@+id/confirmpassword_text"
@@ -29,7 +30,8 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="确认密码"
-        android:textAlignment="center"/>
+        android:inputType="textPassword"
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/register_bt"
