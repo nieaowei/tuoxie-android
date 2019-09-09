@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -70,7 +71,7 @@ public class LoginDataSource {
                             .add("password",password)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://192.168.1.3:8080/login")
+                            .url("http://172.20.10.5:8080/login")
                             .addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
                             .header("User-Agent", "OkHttp Example")
                             .post(requestBody)
@@ -94,11 +95,32 @@ public class LoginDataSource {
                                 public void onResponse(Call call, Response response) throws IOException {
                                     Message message=new Message();
                                     Bundle bundle=new Bundle();
-                                    bundle.putInt("status",response.code());
-                                    bundle.putString("username",username);
+
+                                    if(response.code()==200){
+                                        String data = response.body().string();
+                                        Log.d("debug1",data);
+                                        try {
+                                            JSONObject jsonObject=new JSONObject(data);
+                                            Log.d("debug1",jsonObject.toString());
+                                            Iterator<String> keys = jsonObject.keys();
+                                            while (keys.hasNext()){
+                                                String key = keys.next();
+                                                if(jsonObject.opt(key) instanceof String){
+                                                    bundle.putString(key,jsonObject.optString(key));
+                                                }else if(jsonObject.opt(key)instanceof Integer){
+                                                    bundle.putInt(key,jsonObject.optInt(key));
+                                                }
+                                            }
+                                            Log.d("debug12",bundle.toString());
+
+                                        }catch (Exception e){
+                                            Log.d("debug11",e.getMessage());
+                                        }
+                                    }else {
+                                        bundle.putInt("status",400);
+                                    }
                                     message.setData(bundle);
                                     loginhandler.sendMessage(message);
-                                    Log.d("debug111",String.valueOf(response.code()));
                                 }
                             }
                     );
