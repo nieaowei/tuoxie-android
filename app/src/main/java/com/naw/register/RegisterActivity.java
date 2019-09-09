@@ -1,4 +1,4 @@
-package com.naw;
+package com.naw.register;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,27 +7,34 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.naw.login.LoginActivity;
+import com.naw.login.ui.login.LoginActivity;
 import com.naw.tuoxie_android.R;
 
-import javax.security.auth.Destroyable;
+public class RegisterActivity extends AppCompatActivity {
+    //创建Register的xml对象
 
-public class register extends AppCompatActivity {
 
-    //设置register中Button名字
+    //设置register中Button和EditText名字
     private Button register;
     private Button cancel;
+    private EditText username;
+    private EditText password;
+    private EditText confirmpassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        //给声明的Button赋值
+        //给声明的Button和EditText赋值
         register = findViewById(R.id.register_bt);
         cancel = findViewById(R.id.cancel_bt);
+        username = findViewById(R.id.username_text);
+        password = findViewById(R.id.password_text);
+        confirmpassword = findViewById(R.id.confirmpassword_text);
         Init();
     }
 
@@ -45,10 +52,14 @@ public class register extends AppCompatActivity {
 
     //对点击注册进行判断是否注册成功
     public void goHome(){
+        //判断是否为空
+        if(!(username.getFreezesText())){
+            Toast.makeText(RegisterActivity.this,"用户名不能为空",Toast.LENGTH_SHORT).show();
+        }
         //判断输入密码与再次输入密码是否相同
-        if(R.id.password_text==R.id.confirmpassword_text){
+        else if(password.getFreezesText()==confirmpassword.getFreezesText()){
             //如果相同则显示成功，跳回登陆界面
-            Toast.makeText(register.this,"注册成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this,"注册成功",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }else{

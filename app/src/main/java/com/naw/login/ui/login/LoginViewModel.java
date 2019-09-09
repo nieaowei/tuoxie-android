@@ -28,32 +28,30 @@ public class LoginViewModel extends ViewModel {
     LiveData<LoginResult> getLoginResult() {
         return loginResult;
     }
-    //按键监听的方法，登录
+
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        //返回登录结果
         Result<LoggedInUser> result = loginRepository.login(username, password);
-        //根据结果去执行操作
-        if (result instanceof Result.Success) {//成功
+
+        if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {//失败
+        } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
     }
-    //编辑框改变事件监听
+
     public void loginDataChanged(String username, String password) {
-        if (!isUserNameValid(username)) {//不合法的用户名
+        if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
-        } else if (!isPasswordValid(password)) {//不合法的密码
+        } else if (!isPasswordValid(password)) {
             loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
-        } else {//成功
+        } else {
             loginFormState.setValue(new LoginFormState(true));
         }
     }
 
     // A placeholder username validation check
-    //检查用户名的合法性
     private boolean isUserNameValid(String username) {
         if (username == null) {
             return false;
@@ -66,7 +64,6 @@ public class LoginViewModel extends ViewModel {
     }
 
     // A placeholder password validation check
-    //检查密码的合法性
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }

@@ -6,7 +6,6 @@ package com.naw.login.data;
 public class Result<T> {
     // hide the private constructor to limit subclass types (Success, Error)
     private Result() {
-
     }
 
     @Override
