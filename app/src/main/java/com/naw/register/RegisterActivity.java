@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -45,27 +46,28 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 goHome();
-                Destroy();
+//                Destroy();
             }
         });
     }
 
     //对点击注册进行判断是否注册成功
     public void goHome(){
-        //判断是否为空
-        if(!(username.getFreezesText())){
+        Log.d("debug111",username.getText().toString());
+        if (username.getText().toString().equals("")){
             Toast.makeText(RegisterActivity.this,"用户名不能为空",Toast.LENGTH_SHORT).show();
-        }
-        //判断输入密码与再次输入密码是否相同
-        else if(password.getFreezesText()==confirmpassword.getFreezesText()){
-            //如果相同则显示成功，跳回登陆界面
-            Toast.makeText(RegisterActivity.this,"注册成功",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+        }else if (password.getText().toString().equals("")){
+            Toast.makeText(RegisterActivity.this,"密码不能为空",Toast.LENGTH_SHORT).show();
+        }else if (confirmpassword.getText().toString().equals("")){
+            Toast.makeText(RegisterActivity.this,"密码不能为空",Toast.LENGTH_SHORT).show();
+        }else if (!(password.getText().toString().equals(confirmpassword.getText().toString()))){
+
+            Toast.makeText(RegisterActivity.this,"两次密码输入不一致",Toast.LENGTH_SHORT).show();
         }else{
-            //如果不相同，则失败，重新注册
-            Toast.makeText(this,"两次密码输入不相同，请重新输入",Toast.LENGTH_SHORT).show();
+
         }
+        Log.d("debug111","finish");
+
     }
 
     //销毁方法
