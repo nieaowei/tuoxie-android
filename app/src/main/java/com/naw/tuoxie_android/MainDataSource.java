@@ -1,68 +1,31 @@
-package com.naw.login.data;
+package com.naw.tuoxie_android;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.naw.login.data.model.LoggedInUser;
-import com.naw.login.ui.login.LoginActivity;
-import com.naw.tuoxie_android.MainActivity;
-
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.Timeout;
 
-/**
- * Class that handles authentication w/ login credentials and retrieves user information.
- */
-public class LoginDataSource {
-
-    private Handler mHandler = new Handler();
-
-    public Result<LoggedInUser> login(String username, String password,final Handler loginhandler) {
-
-        try {
-            // TODO: handle loggedInUser authentication
-            loginService(username,password,loginhandler);
-
-            return new Result.Success<>(new LoggedInUser("1","1"));
-        } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
-        }
-    }
-
-    public void logout() {
-        // TODO: revoke authentication
-    }
-
-
-    private boolean loginService(final String username, final String password, final Handler loginhandler){
+public class MainDataSource {
+    final String url = "http://172.20.10.5:8080/getLastGPS";
+    public void getLastGPSInfo(final String username,final Handler mainHandler){
         try {
             new Thread(){
                 @Override
                 public void run() {
-                    Log.d("login_info",username);
-
                     OkHttpClient client = new OkHttpClient.Builder()
                             .connectTimeout(300, TimeUnit.MILLISECONDS)
                             .readTimeout(300,TimeUnit.MILLISECONDS)
@@ -70,10 +33,9 @@ public class LoginDataSource {
                             .build();
                     RequestBody requestBody = new FormBody.Builder()
                             .add("username",username)
-                            .add("password",password)
                             .build();
                     Request request = new Request.Builder()
-                            .url("http://172.20.10.5:8080/login")
+                            .url(url)
                             .addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
                             .header("User-Agent", "OkHttp Example")
                             .post(requestBody)
@@ -89,8 +51,8 @@ public class LoginDataSource {
                                     Bundle bundle=new Bundle();
                                     bundle.putInt("status",400);
                                     message.setData(bundle);
-                                    loginhandler.sendMessage(message);
-                                    Log.d("login_info",e.getMessage());
+                                    mainHandler.sendMessage(message);
+                                    Log.d("gps_info",e.getMessage()+" onfalid");
                                 }
 
                                 @Override
@@ -100,10 +62,10 @@ public class LoginDataSource {
 
                                     if(response.code()==200){
                                         String data = response.body().string();
-                                        Log.d("login_info",data);
+                                        Log.d("gps_info",data);
                                         try {
                                             JSONObject jsonObject=new JSONObject(data);
-                                            Log.d("login_info",jsonObject.toString());
+                                            Log.d("gps_info",jsonObject.toString());
                                             Iterator<String> keys = jsonObject.keys();
                                             while (keys.hasNext()){
                                                 String key = keys.next();
@@ -111,35 +73,35 @@ public class LoginDataSource {
                                                     bundle.putString(key,jsonObject.optString(key));
                                                 }else if(jsonObject.opt(key)instanceof Integer){
                                                     bundle.putInt(key,jsonObject.optInt(key));
+                                                }else {
+                                                    bundle.putString(key,jsonObject.optString(key));
                                                 }
                                             }
                                             bundle.putString("username",username);
-                                            Log.d("login_info",bundle.toString());
-                                            Log.d("login_info","登录成功，用户为："+username);
+                                            Log.d("gps_info",bundle.toString());
+                                            Log.d("gps_info","登录成功，用户为："+username);
 
                                         }catch (Exception e){
-                                            Log.d("login_info",e.getMessage());
+                                            Log.d("gps_info",e.getMessage()+" onres");
                                         }
                                     }else {
                                         bundle.putInt("status",400);
                                     }
                                     message.setData(bundle);
-                                    loginhandler.sendMessage(message);
+                                    mainHandler.sendMessage(message);
                                 }
                             }
                     );
                 }
             }.start();
         }catch (Exception e){
-            Log.d("debug111",e.getMessage());
+            Log.d("gps_info",e.getMessage()+" aaa");
             Message message=new Message();
             Bundle bundle=new Bundle();
             bundle.putInt("status",400);
             message.setData(bundle);
-            loginhandler.sendMessage(message);
-            return false;
+            mainHandler.sendMessage(message);
         }
-        return false;
     }
-
 }
+

@@ -11,4 +11,8 @@
     <string name="login_failed">"Login failed"</string>
     <string name="prompt_email">Email</string>
     <string name="jump_register">注册</string>
+    <string name="getLastGPSStr">获取最后一次位置</string>
+    <string name="statusTextStr">TextView</string>
+    <string name="userinfoStr"></string>
+    <string name="goToStr">开始导航</string>
 </resources>

@@ -68,17 +68,21 @@ public class LoginActivity extends AppCompatActivity {
         //
 
 
-        loginhandler =new Handler(){
+        loginhandler = new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
                 switch (msg.getData().getInt("status")){
                     case 200:{
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                        loginViewModel.setLoginResult(new LoginResult(new LoggedInUserView("登录成功")));
+                        loginViewModel.setLoginResult(new LoginResult(new LoggedInUserView(msg.getData().getString("username"))));
+                        Bundle bundle=new Bundle();
+                        bundle.putString("username",msg.getData().getString("username"));
+                        i.putExtras(bundle);
                         startActivity(i);
                         break;
                     }
                     case 400:{
+                        Log.d("login_info","handler 400");
                         loginViewModel.setLoginResult(new LoginResult(R.string.login_failed));
                         loadingProgressBar.setVisibility(View.INVISIBLE);
                     }
