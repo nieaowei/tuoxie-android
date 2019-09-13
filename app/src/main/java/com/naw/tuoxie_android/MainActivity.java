@@ -23,11 +23,14 @@ import com.amap.api.maps.model.MyLocationStyle;
 
 import org.json.JSONObject;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MainActivity extends Activity {
     MapView mMapView = null;
     AMap aMap;
-    Handler GPSHandler;
+    Handler GPSHandler,FallHandler;
     static int flag=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,9 @@ public class MainActivity extends Activity {
 
 
         Button getLastGPS_bt = findViewById(R.id.getLastGPS_bt);
+        final Button getFall_bt = findViewById(R.id.getFall_bt);
         TextView userinfotext = findViewById(R.id.userinfotext);
+        final TextView statutext = findViewById(R.id.reminder_text);
 
         mMapView = (MapView) findViewById(R.id.map);
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
@@ -59,6 +64,12 @@ public class MainActivity extends Activity {
             }
         });
 
+        getFall_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MainDataSource().getLastFallInfo(MainActivity.this.getIntent().getStringExtra("username"), FallHandler,0);
+            }
+        });
 
         LatLng latLng = new LatLng(26.881865,112.684922);
         final Marker LastMarker = aMap.addMarker(new MarkerOptions().position(latLng).title("最后一次位置").snippet("DefaultMarker"));
@@ -82,12 +93,88 @@ public class MainActivity extends Activity {
                     aMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(aMap.getMyLocation().getLatitude(),aMap.getMyLocation().getLongitude())));
                     flag++;
                 }
-                LastMarker.setPosition(new LatLng(aMap.getMyLocation().getLatitude(),aMap.getMyLocation().getLongitude()));
+                //LastMarker.setPosition(new LatLng(aMap.getMyLocation().getLatitude(),aMap.getMyLocation().getLongitude()));
 //                Log.d("location1:",String.valueOf(aMap.getMyLocation().getLatitude()));
 //                Log.d("location12:",String.valueOf(aMap.getMyLocation().getLongitude()));
             }
         });
         //定位结束
+
+        final Double[] former_latitude = {new Double(0)};
+        final Double[] former_longitude = {new Double(0)};
+        final int[] flag = {0};
+        FallHandler = new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                switch (msg.getData().getInt("status")){
+                    case 400:{
+                        Log.d("gpsmarker","400 handler");
+                        //更新
+                        break;
+                    }
+                    case 200:{
+                        //更新地
+                        Log.d("gpsmarker","200 handler");
+                        try{
+                            JSONObject jsonObject = new JSONObject(msg.getData().getString("data"));
+                            Double latitude,longitude;
+                            latitude=new Double(jsonObject.getDouble("latitude"));
+                            longitude=new Double(jsonObject.getDouble("longitude"));
+                            Log.d("lo111",former_latitude[0].toString()+former_longitude[0].toString()+latitude.toString()+longitude.toString());
+
+                            if((former_latitude[0].doubleValue() !=latitude.doubleValue() || former_longitude[0].doubleValue() !=longitude.doubleValue())){
+                               // statutext.setText("["+jsonObject.getString("time")+"]"+"跌倒警告！！！位置："+jsonObject.getDouble("longitude")+","+jsonObject.getDouble("latitude"));
+                                statutext.append("["+jsonObject.getString("time")+"]"+"跌倒警告！！！位置："+jsonObject.getDouble("longitude")+","+jsonObject.getDouble("latitude")+"\n");
+                            }else {
+                                former_latitude[0] = latitude;
+                                former_longitude[0] = longitude;
+                            }
+
+                            LatLng latLng1=new LatLng(latitude,longitude);
+
+                            LastMarker.setPosition(latLng1);
+                            LastMarker.setSnippet(jsonObject.getString("time"));
+
+                            aMap.moveCamera(CameraUpdateFactory.newLatLng(latLng1));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case 300:{
+                        try{
+                            JSONObject jsonObject = new JSONObject(msg.getData().getString("data"));
+                            Double latitude,longitude;
+                            latitude=new Double(jsonObject.getDouble("latitude"));
+                            longitude=new Double(jsonObject.getDouble("longitude"));
+                            Log.d("lo111",former_latitude[0].toString()+former_longitude[0].toString()+latitude.toString()+longitude.toString());
+
+                            if((former_latitude[0].doubleValue() !=latitude.doubleValue() || former_longitude[0].doubleValue() !=longitude.doubleValue() )&& flag[0] ==1){
+                                // statutext.setText("["+jsonObject.getString("time")+"]"+"跌倒警告！！！位置："+jsonObject.getDouble("longitude")+","+jsonObject.getDouble("latitude"));
+                                statutext.append("["+jsonObject.getString("time")+"]"+"跌倒警告！！！位置："+jsonObject.getDouble("longitude")+","+jsonObject.getDouble("latitude")+"\n");
+                                int offset=statutext.getLineCount()*statutext.getLineHeight();
+                                if(offset>statutext.getHeight()){
+                                    statutext.scrollTo(0,offset-statutext.getHeight());
+                                }
+                            }else {
+                                flag[0] =1;
+                                former_latitude[0] = latitude;
+                                former_longitude[0] = longitude;
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } ;
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                new MainDataSource().getLastFallInfo(MainActivity.this.getIntent().getStringExtra("username"), FallHandler,1);
+            }
+        },0,2000);
 
         GPSHandler = new Handler(){
             @Override
@@ -103,9 +190,15 @@ public class MainActivity extends Activity {
                         Log.d("gpsmarker","200 handler");
                         try{
                             JSONObject jsonObject = new JSONObject(msg.getData().getString("data"));
-                            LatLng latLng1=new LatLng(jsonObject.getDouble("latitude"),jsonObject.getDouble("longitude"));
+                            Double latitude,longitude;
+                            latitude=new Double(jsonObject.getDouble("latitude"));
+                            longitude=new Double(jsonObject.getDouble("longitude"));
+
+                            LatLng latLng1=new LatLng(latitude,longitude);
                             LastMarker.setPosition(latLng1);
                             LastMarker.setSnippet(jsonObject.getString("time"));
+
+                            aMap.moveCamera(CameraUpdateFactory.newLatLng(latLng1));
                         }catch (Exception e){
                             e.printStackTrace();
                         }

@@ -44,7 +44,16 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="162dp" />
+        android:layout_marginBottom="162dp"
+        android:fadeScrollbars="false"
+        android:isScrollContainer="true"
+        android:keepScreenOn="true"
+        android:overScrollMode="ifContentScrolls"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbars="vertical"
+        android:scrollHorizontally="true"
+        android:verticalScrollbarPosition="right" />
 
     <TextView
         android:id="@+id/userinfotext"
@@ -62,20 +71,21 @@
         android:id="@+id/goToLocation"
         android:layout_width="114dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="78dp"
-        android:layout_marginBottom="101dp"
+        android:layout_marginStart="258dp"
+        android:layout_marginBottom="29dp"
         android:layout_toEndOf="@+id/getLastGPS_bt"
         android:text="@string/goToStr" />
 
     <Button
-        android:id="@+id/button17"
+        android:id="@+id/getFall_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="37dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="103dp"
         android:text="获取最近一次跌倒位置" />
 
 </RelativeLayout>

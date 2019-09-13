@@ -55,6 +55,17 @@ public class LoginActivity extends AppCompatActivity {
         //设置布局文件
         setContentView(R.layout.activity_login);
 
+//        if(this.getIntent().getExtras()!=null){
+//            String text = this.getIntent().getExtras().getString("msg");
+//            Toast.makeText(LoginActivity.this,text,Toast.LENGTH_SHORT);
+//        }
+        super.onStart();
+        if(this.getIntent().getExtras()!=null){
+            String text = this.getIntent().getExtras().getString("msg");
+            Toast.makeText(LoginActivity.this,text,Toast.LENGTH_SHORT);
+            Log.d("debbug1236",this.getIntent().getExtras().toString());
+
+        }
 
         //创建登录窗口模型
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
@@ -188,5 +199,52 @@ public class LoginActivity extends AppCompatActivity {
     //展示登录错误的信息
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        Log.d("debug123","start");
+//        if(this.getIntent().getExtras()!=null){
+//            String text = this.getIntent().getExtras().getString("msg");
+//            Toast.makeText(LoginActivity.this,text,Toast.LENGTH_SHORT).show();
+//            Log.d("debbug1234",this.getIntent().getExtras().toString());
+//
+//        }
+//        if (this.getIntent()!=null){
+//            Toast.makeText(LoginActivity.this,this.getIntent().getStringExtra("msg"),Toast.LENGTH_SHORT).show();
+//        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("debug123","start");
+        if(this.getIntent().getExtras()!=null){
+            String text = this.getIntent().getExtras().getString("msg");
+            Toast.makeText(LoginActivity.this,text,Toast.LENGTH_SHORT).show();
+            Log.d("debbug1234",this.getIntent().getExtras().toString());
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("debug123","destrory");
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("debug123","start");
+        if(this.getIntent().getExtras()!=null){
+            String text = this.getIntent().getExtras().getString("msg");
+            Toast.makeText(LoginActivity.this,text,Toast.LENGTH_SHORT).show();
+            Log.d("debbug1234",this.getIntent().getExtras().toString());
+
+        }
+
     }
 }
