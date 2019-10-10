@@ -1,45 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="436dp"
+        android:layout_height="110dp"
+        app:srcCompat="@mipmap/pic101" />
+
     <EditText
         android:id="@+id/username_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:background="@mipmap/pic104"
         android:ems="10"
         android:hint="用户名"
+        android:maxLines="1"
         android:textAlignment="center" />
 
     <EditText
         android:id="@+id/phone_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="20dp"
+        android:background="@mipmap/pic104"
         android:ems="10"
         android:hint="手机号码"
+        android:maxLines="1"
         android:textAlignment="center" />
 
     <EditText
         android:id="@+id/password_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="20dp"
+        android:background="@mipmap/pic104"
         android:ems="10"
         android:hint="密码"
         android:inputType="textPassword"
+        android:maxLines="1"
         android:textAlignment="center" />
 
     <EditText
         android:id="@+id/confirmpassword_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="20dp"
+        android:background="@mipmap/pic104"
         android:ems="10"
         android:hint="确认密码"
         android:inputType="textPassword"
+        android:maxLines="1"
         android:textAlignment="center" />
 
     <Button
@@ -55,4 +70,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="取消"/>
+
 </LinearLayout>

@@ -12,7 +12,7 @@
 
     <Button
         android:id="@+id/getLastGPS_bt"
-        android:layout_width="159dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
@@ -57,25 +57,24 @@
 
     <TextView
         android:id="@+id/userinfotext"
-        android:layout_width="175dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="7dp"
-        android:layout_marginEnd="229dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginEnd="222dp"
+        android:layout_marginBottom="13dp"
         android:text="@string/userinfoStr" />
 
     <Button
         android:id="@+id/goToLocation"
         android:layout_width="114dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="258dp"
-        android:layout_marginBottom="29dp"
-        android:layout_toEndOf="@+id/getLastGPS_bt"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/goToStr" />
 
     <Button
@@ -85,7 +84,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="103dp"
-        android:text="获取最近一次跌倒位置" />
+        android:layout_marginBottom="100dp"
+        android:text="获取最近跌倒位置" />
 
 </RelativeLayout>
